@@ -5,4 +5,4 @@ title: "Involvement"
 * I am an Intern with CREED (NC's Center for Racial Equity in Education). I work in the Policy and Advocacy Department. We work to ensure all peopl in North Carolina have access to quality education. [Creed Website](https://www.creed-nc.org/)
 * I previously worked for Appalachian Senior Programs as the Media Manager. I created weekly informational brochures for volunteers to promote education and inclusion to both programs under ASP. [App Senior Programs Website](https://seniorprograms.appstate.edu/)
 * I currently work in the student learning center as a Peer Academic Leader (PAL). We host daily drop-in academic support andacademic workshop presentations. [PAL Resources](https://studentlearningcenter.appstate.edu/academic-success/drop-in)
-* In STT 2860, I learned to combine dat sets with R. [Combining Data Sets](https://mathr.appstate.edu/s/a0a27c2219c1329e67a44/files/STT%202860/git_repos/anguswithee_STT_2860/CombiningDataSets.html#(1))
+* In STT 2860, I learned to combine dat sets with R. [Combining Data Sets](https://mathr.appstate.edu/s/a0a278ca17a2e29e67a44/files/STT2860/anguswithee.github.io/CombiningDataSets.html#(1))

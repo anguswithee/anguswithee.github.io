@@ -3,7 +3,4 @@ title: "About Me"
 ---
 I am a sociology major with minors in public health and statistics. I am pursuing a career in social research and data analysis. I am interested in researching areas of social justice, such as senior issues, LGBTQ+ issues, and criminal justice reform. My hobbies include film, writing, hiking, and playing with my cat Miso Soup.
 
-![Picture of Miso Soup](https://raw.githubusercontent.com/anguswithee/anguswithee.github.io/refs/heads/main/docs/IMG_1641.jpeg)
-
-```
-
+![Picture of Miso Soup](https://github.com/anguswithee/anguswithee.github.io/blob/main/soup.jpg?raw=true)

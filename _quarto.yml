@@ -12,10 +12,10 @@ website:
       - project.qmd
     
     tools:
-      - icon: trash
-        href: https://www.mountainproject.com/area/112001458/the-dump
-      - icon: twitter
-        href: https://x.com
+      - icon: film
+        href: https://letterboxd.com/awithee/
+      - icon: instagram
+        href: https://www.instagram.com/awithee19/
       - icon: linkedin
         href: https://www.linkedin.com/
       - icon: github
