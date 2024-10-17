@@ -1,0 +1,77 @@
+---
+title: "Combining Data Sets"
+output:
+  slidy_presentation:
+    widescreen: true
+---
+```{r, global_options, include=FALSE}
+    library(knitr)
+    library(formatR)
+    opts_chunk$set(
+      echo=TRUE,
+      warning=FALSE,
+      message=FALSE,
+      tidy = TRUE,
+      tidy.opts=list(blank=FALSE, width.cutoff=60,size = 'tiny'),
+      fig.width=5, 
+      fig.height=4, 
+      fig.path='Figs/')
+```
+***
+
+```{r}
+#install.packages("remotes")
+#remotes::install_github("matthewhirschey/tidybiology", force = TRUE)
+library(dplyr)
+library(tidybiology)
+
+data(happy)
+data(happy_join_one)
+data(happy_full)
+```
+***
+title:"Problem Two"
+**Problem One**
+
+Take a closer look at the three data frames - happy, happy_join_one, and happy_full
+
+```{r}
+glimpse(happy)
+glimpse(happy_join_one)
+glimpse(happy_full)
+```
+***
+**Problem Two**
+
+Combine happy and happy_join_one by row
+
+```{r}
+bind_rows(happy, happy_join_one)
+```
+***
+**Problem Three**
+
+Combine happy and happy_join_one by column
+
+```{r}
+nrow(happy) == nrow(happy_join_one)
+bind_cols(happy, happy_join_one)
+```
+***
+**Problem Four**
+
+Which join function is a better alternative to the previous solution?
+
+```{r}
+happy%>%
+  inner_join(happy_join_one)
+```
+***
+**Problem Five**
+
+Filter out all countries from happy_full that are also in happy
+
+```{r}
+happy_full %>%
+  anti_join(happy)
+```

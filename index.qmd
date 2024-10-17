@@ -1,11 +1,13 @@
 ---
-title: "Quarto Web Demo"
+title: "Angus Withee"
 ---
 
-This is the main landing page!
+Sociology Major
 
-* To learn more about [geezers](https://www.thegeezer.com/).
+Appalachian State University
 
-* To learn more about [Quarto websites](https://quarto.org/docs/websites).
+![Picture of Me](https://raw.githubusercontent.com/anguswithee/anguswithee.github.io/refs/heads/main/docs/IMG_1434.jpeg)
+
+
 
 
