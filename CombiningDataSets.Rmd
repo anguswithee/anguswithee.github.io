@@ -30,7 +30,6 @@ data(happy_join_one)
 data(happy_full)
 ```
 ***
-title:"Problem Two"
 **Problem One**
 
 Take a closer look at the three data frames - happy, happy_join_one, and happy_full
