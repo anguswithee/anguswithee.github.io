@@ -10,6 +10,7 @@ website:
         text: Home
       - about.qmd
       - project.qmd
+      - project2.qmd
     
     tools:
       - icon: film

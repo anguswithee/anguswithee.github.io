@@ -1,0 +1,107 @@
+---
+title: "North Carolina Public School Demographics (2013-2023)"
+date: last-modified
+date-format: "[Last modified on] MMMM DD, YYYY HH:mm:ss zzz"
+format: 
+  html:
+    output: bookdown::html_document2
+    fig_caption: yes
+    theme: cosmo  # zephyr pulse, sketchy, default, cosmo, vapor etc
+author:
+  - name: Angus Victor Withee
+    email: witheeav@appstate.edu
+    affiliation:
+      - name: Appalachian State University
+        city: Boone
+        state: NC  
+        url: https://www.appstate.edu/
+abstract: >
+  Fill in later
+keywords:
+  - R
+  - data viz
+license: "CC BY"  
+code-fold: false
+---
+# Introduction
+
+This is an exploration and visualization of North Carolina public school demographic data from February 2014 to February 2024. All data was obtained from the North Carolina Public School Statistical Profile (http://apps.schools.nc.gov/ords/f?p=145:1).
+
+```{r}
+#| label: "setup"
+#| include: false
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, comment = NA, fig.align = "center")
+```
+
+## Loading Necessary Packages
+
+```{r}
+#| label: "needed"
+library(dplyr)
+library(lubridate)
+library(tidyr)
+library(ggmap)
+library(mapproj)
+library(ggplot2)
+library(caret)
+```
+
+## Importing Data
+```{r}
+demographics <- read.csv("~/STT2860/anguswithee.github.io/demographics.csv")
+```
+
+## Variables
+
+`demographics`
+```{r,echo=FALSE}
+glimpse(demographics)
+```
+
+There are 17 variables in the `demographics` data frame.
+
+1. `year`: The year the data was collected (2014-2024).
+2. `LEA.Name`: The name of the county or counties in which the data was collected.
+3. `Indian Male`: The number of Indigenous male students in the given county each year.
+4. `Indian Female`: The number of Indigenous female students in the given county each year.
+5. `Asian Male`: The number of Asian male students in the given county each year.
+6. `Asian Female`: The number of Asian female students in the given county each year.
+7. `Hispanic Male`: The number of Hispanic male students in the given county each year.
+8. `Hispanic Female`: The number of Hispanic female students in the given county each year.
+9. `Black Male`: The number of Black male students in the given county each year.
+10. `Black Female`: The number of Black male students in the given county each year.
+11. `White Male`: The number of White male students in the given county each year.
+12. `White Female`: The number of White female students in the given county each year.
+13. `Pacific Island Male`: The number of Pacific Island male students in the given county each year.
+14. `Paicific Island Female`: The number of Hispanic female students in the given county each year.
+15. `Two or More Male`: The number of male students who identify with two or more races in the given county each year.
+16. `Two or More Female`: The number of female students who identify with two or more races in the given county each year.
+17. `Total`: The total number of students in the given county each year.
+
+## Data Wrangling
+
+To make the data ideal for visualization, merge and rename variables.
+
+```{r}
+demographics_by_sex <- demographics |> 
+  group_by(Year) |>
+  summarize(aapi_male = ASIAN.Male+PACIFIC.ISLAND..Male,
+            aapi_female = ASIAN.Female+PACIFIC.ISLAND..Female,
+            indigenous_male = INDIAN.Male,
+            indigenous_female = INDIAN.Female,
+            hispanic_male = HISPANIC.Male,
+            hispanic_female = HISPANIC.Female,
+            black_male = BLACK.Male,
+            black_female = BLACK.Female,
+            white_male = WHITE.Male,
+            white_female = WHITE.Female,
+            other_male = TWO.OR.MORE.Male,
+            other_female = TWO.OR.MOREFemale) |>
+  mutate(total_male = aapi_male+indigenous_male+hispanic_male+black_male+white_male+other_male,
+         total_female = aapi_female+indigenous_female+hispanic_female+black_female+white_female+other_female)
+demographics_by_sex <- demographics_by_sex |> filter (Year>1)
+demographics_by_sex
+```
+
+
+

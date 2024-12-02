@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Angus Victor Withee">
+<meta name="keywords" content="R, data viz">
 
-<title>Angus Withee - Combining Data Sets</title>
+<title>Angus Withee - North Carolina Public School Demographics (2013-2023)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -128,7 +130,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Involvement</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./project2.html" rel="" target="">
+    <a class="nav-link active" href="./project2.html" rel="" target="" aria-current="page">
  <span class="menu-text">North Carolina Public School Demographics (2013-2023)</span></a>
   </li>  
 </ul>
@@ -156,177 +158,184 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#loading-necessary-packages" id="toc-loading-necessary-packages" class="nav-link" data-scroll-target="#loading-necessary-packages">Loading Necessary Packages</a></li>
+  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data">Importing Data</a></li>
+  <li><a href="#variables" id="toc-variables" class="nav-link" data-scroll-target="#variables">Variables</a></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Combining Data Sets</h1>
+<h1 class="title">North Carolina Public School Demographics (2013-2023)</h1>
 </div>
 
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Angus Victor Withee </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            <a href="https://www.appstate.edu/">
+            Appalachian State University
+            </a>
+          </p>
+      </div>
+    </div>
 
 <div class="quarto-title-meta">
 
-    
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">Last modified on December 02, 2024 13:59:15 Eastern Standard Time</p>
+    </div>
+  </div>
   
     
   </div>
   
+<div>
+  <div class="abstract">
+    <div class="abstract-title">Abstract</div>
+    <p>Fill in later</p>
+  </div>
+</div>
 
 </header>
 
-<hr>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages('remotes')</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_github('matthewhirschey/tidybiology',</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># force = TRUE)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybiology)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(happy)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(happy_join_one)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(happy_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>This is an exploration and visualization of North Carolina public school demographic data from February 2014 to February 2024. All data was obtained from the North Carolina Public School Statistical Profile (http://apps.schools.nc.gov/ords/f?p=145:1).</p>
+<section id="loading-necessary-packages" class="level2">
+<h2 class="anchored" data-anchor-id="loading-necessary-packages">Loading Necessary Packages</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmap)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mapproj)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<hr>
-<p><strong>Problem One</strong></p>
-<p>Take a closer look at the three data frames - happy, happy_join_one, and happy_full</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(happy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="importing-data" class="level2">
+<h2 class="anchored" data-anchor-id="importing-data">Importing Data</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>demographics <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"~/STT2860/anguswithee.github.io/demographics.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="variables" class="level2">
+<h2 class="anchored" data-anchor-id="variables">Variables</h2>
+<p><code>demographics</code></p>
+<div class="cell" data-layout-align="center">
 <div class="cell-output cell-output-stdout">
-<pre><code>Rows: 5
-Columns: 4
-$ country_name   &lt;chr&gt; "Iraq", "Comoros", "Panama", "Maldives", "Spain"
-$ ladder_score   &lt;dbl&gt; 4.854, 4.289, 6.180, 5.198, 6.491
-$ gdp            &lt;dbl&gt; 9.240, 8.031, 10.350, 9.826, 10.571
-$ social_support &lt;dbl&gt; 0.746, 0.626, 0.896, 0.913, 0.932</code></pre>
+<pre><code>Rows: 1,270
+Columns: 17
+$ Year                   &lt;chr&gt; "2014", "2014", "2014", "2014", "2014", "2014",…
+$ LEA.Name               &lt;chr&gt; "Alamance-Burlington Schools", "Alexander Count…
+$ INDIAN.Male            &lt;int&gt; 46, 4, 2, 8, 0, 6, 5, 0, 7, 7, 26, 59, 52, 9, 6…
+$ INDIAN.Female          &lt;int&gt; 51, 7, 2, 5, 3, 9, 3, 2, 3, 5, 35, 55, 33, 11, …
+$ ASIAN.Male             &lt;int&gt; 158, 51, 1, 29, 10, 33, 18, 4, 7, 4, 3, 42, 159…
+$ ASIAN.Female           &lt;int&gt; 141, 50, 2, 25, 7, 41, 36, 8, 10, 2, 4, 38, 216…
+$ HISPANIC.Male          &lt;int&gt; 2657, 213, 154, 57, 165, 980, 135, 108, 495, 26…
+$ HISPANIC.Female        &lt;int&gt; 2600, 212, 147, 66, 133, 934, 161, 109, 492, 27…
+$ BLACK.Male             &lt;int&gt; 2462, 107, 8, 1030, 9, 351, 511, 3, 1201, 1075,…
+$ BLACK.Female           &lt;int&gt; 2297, 100, 3, 1046, 7, 342, 484, 3, 1118, 1049,…
+$ WHITE.Male             &lt;int&gt; 5897, 2232, 551, 623, 1411, 911, 1317, 934, 179…
+$ WHITE.Female           &lt;int&gt; 5423, 2121, 572, 620, 1372, 938, 1257, 941, 163…
+$ PACIFIC.ISLAND..Male   &lt;int&gt; 18, 0, 0, 0, 0, 0, 5, 1, 2, 1, 2, 5, 33, 5, 15,…
+$ PACIFIC.ISLAND..Female &lt;int&gt; 12, 1, 0, 0, 0, 3, 2, 1, 2, 1, 0, 6, 30, 4, 24,…
+$ TWO.OR.MORE.Male       &lt;int&gt; 422, 102, 13, 46, 28, 77, 162, 18, 128, 21, 103…
+$ TWO.OR.MOREFemale      &lt;int&gt; 431, 90, 16, 47, 29, 99, 134, 23, 128, 19, 104,…
+$ Total                  &lt;int&gt; 22615, 5290, 1471, 3602, 3174, 4724, 4230, 2155…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(happy_join_one)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are 17 variables in the <code>demographics</code> data frame.</p>
+<ol type="1">
+<li><code>year</code>: The year the data was collected (2014-2024).</li>
+<li><code>LEA.Name</code>: The name of the county or counties in which the data was collected.</li>
+<li><code>Indian Male</code>: The number of Indigenous male students in the given county each year.</li>
+<li><code>Indian Female</code>: The number of Indigenous female students in the given county each year.</li>
+<li><code>Asian Male</code>: The number of Asian male students in the given county each year.</li>
+<li><code>Asian Female</code>: The number of Asian female students in the given county each year.</li>
+<li><code>Hispanic Male</code>: The number of Hispanic male students in the given county each year.</li>
+<li><code>Hispanic Female</code>: The number of Hispanic female students in the given county each year.</li>
+<li><code>Black Male</code>: The number of Black male students in the given county each year.</li>
+<li><code>Black Female</code>: The number of Black male students in the given county each year.</li>
+<li><code>White Male</code>: The number of White male students in the given county each year.</li>
+<li><code>White Female</code>: The number of White female students in the given county each year.</li>
+<li><code>Pacific Island Male</code>: The number of Pacific Island male students in the given county each year.</li>
+<li><code>Paicific Island Female</code>: The number of Hispanic female students in the given county each year.</li>
+<li><code>Two or More Male</code>: The number of male students who identify with two or more races in the given county each year.</li>
+<li><code>Two or More Female</code>: The number of female students who identify with two or more races in the given county each year.</li>
+<li><code>Total</code>: The total number of students in the given county each year.</li>
+</ol>
+</section>
+<section id="data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling">Data Wrangling</h2>
+<p>To make the data ideal for visualization, merge and rename variables.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>demographics_by_sex <span class="ot">&lt;-</span> demographics <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">aapi_male =</span> ASIAN.Male<span class="sc">+</span>PACIFIC.ISLAND..Male,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">aapi_female =</span> ASIAN.Female<span class="sc">+</span>PACIFIC.ISLAND..Female,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">indigenous_male =</span> INDIAN.Male,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">indigenous_female =</span> INDIAN.Female,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">hispanic_male =</span> HISPANIC.Male,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">hispanic_female =</span> HISPANIC.Female,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">black_male =</span> BLACK.Male,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">black_female =</span> BLACK.Female,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">white_male =</span> WHITE.Male,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">white_female =</span> WHITE.Female,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">other_male =</span> TWO.OR.MORE.Male,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">other_female =</span> TWO.OR.MOREFemale) <span class="sc">|&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_male =</span> aapi_male<span class="sc">+</span>indigenous_male<span class="sc">+</span>hispanic_male<span class="sc">+</span>black_male<span class="sc">+</span>white_male<span class="sc">+</span>other_male,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">total_female =</span> aapi_female<span class="sc">+</span>indigenous_female<span class="sc">+</span>hispanic_female<span class="sc">+</span>black_female<span class="sc">+</span>white_female<span class="sc">+</span>other_female)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>demographics_by_sex <span class="ot">&lt;-</span> demographics_by_sex <span class="sc">|&gt;</span> <span class="fu">filter</span> (Year<span class="sc">&gt;</span><span class="dv">1</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>demographics_by_sex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Rows: 5
-Columns: 2
-$ country_name            &lt;chr&gt; "Iraq", "Comoros", "Panama", "Maldives", "Spai…
-$ healthy_life_expectancy &lt;dbl&gt; 60.583, 57.349, 69.652, 70.600, 74.700</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(happy_full)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 149
-Columns: 20
-$ country_name                              &lt;chr&gt; "Finland", "Denmark", "Switz…
-$ region                                    &lt;chr&gt; "Western Europe", "Western E…
-$ ladder_score                              &lt;dbl&gt; 7.842, 7.620, 7.571, 7.554, …
-$ standard_error_of_ladder_score            &lt;dbl&gt; 0.032, 0.035, 0.036, 0.059, …
-$ upperwhisker                              &lt;dbl&gt; 7.904, 7.687, 7.643, 7.670, …
-$ lowerwhisker                              &lt;dbl&gt; 7.780, 7.552, 7.500, 7.438, …
-$ logged_gdp_per_capita                     &lt;dbl&gt; 10.775, 10.933, 11.117, 10.8…
-$ social_support                            &lt;dbl&gt; 0.954, 0.954, 0.942, 0.983, …
-$ healthy_life_expectancy                   &lt;dbl&gt; 72.000, 72.700, 74.400, 73.0…
-$ freedom_to_make_life_choices              &lt;dbl&gt; 0.949, 0.946, 0.919, 0.955, …
-$ generosity                                &lt;dbl&gt; -0.098, 0.030, 0.025, 0.160,…
-$ perceptions_of_corruption                 &lt;dbl&gt; 0.186, 0.179, 0.292, 0.673, …
-$ ladder_score_in_dystopia                  &lt;dbl&gt; 2.43, 2.43, 2.43, 2.43, 2.43…
-$ explained_by_log_gdp_per_capita           &lt;dbl&gt; 1.446, 1.502, 1.566, 1.482, …
-$ explained_by_social_support               &lt;dbl&gt; 1.106, 1.108, 1.079, 1.172, …
-$ explained_by_healthy_life_expectancy      &lt;dbl&gt; 0.741, 0.763, 0.816, 0.772, …
-$ explained_by_freedom_to_make_life_choices &lt;dbl&gt; 0.691, 0.686, 0.653, 0.698, …
-$ explained_by_generosity                   &lt;dbl&gt; 0.124, 0.208, 0.204, 0.293, …
-$ explained_by_perceptions_of_corruption    &lt;dbl&gt; 0.481, 0.485, 0.413, 0.170, …
-$ dystopia_residual                         &lt;dbl&gt; 3.253, 2.868, 2.839, 2.967, …</code></pre>
-</div>
-</div>
-<hr>
-<p><strong>Problem Two</strong></p>
-<p>Combine happy and happy_join_one by row</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(happy, happy_join_one)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 5
-   country_name ladder_score   gdp social_support healthy_life_expectancy
-   &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;                   &lt;dbl&gt;
- 1 Iraq                 4.85  9.24          0.746                    NA  
- 2 Comoros              4.29  8.03          0.626                    NA  
- 3 Panama               6.18 10.4           0.896                    NA  
- 4 Maldives             5.20  9.83          0.913                    NA  
- 5 Spain                6.49 10.6           0.932                    NA  
- 6 Iraq                NA    NA            NA                        60.6
- 7 Comoros             NA    NA            NA                        57.3
- 8 Panama              NA    NA            NA                        69.7
- 9 Maldives            NA    NA            NA                        70.6
-10 Spain               NA    NA            NA                        74.7</code></pre>
-</div>
-</div>
-<hr>
-<p><strong>Problem Three</strong></p>
-<p>Combine happy and happy_join_one by column</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(happy) <span class="sc">==</span> <span class="fu">nrow</span>(happy_join_one)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] TRUE</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_cols</span>(happy, happy_join_one)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 6
-  country_name...1 ladder_score   gdp social_support country_name...5
-  &lt;chr&gt;                   &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt; &lt;chr&gt;           
-1 Iraq                     4.85  9.24          0.746 Iraq            
-2 Comoros                  4.29  8.03          0.626 Comoros         
-3 Panama                   6.18 10.4           0.896 Panama          
-4 Maldives                 5.20  9.83          0.913 Maldives        
-5 Spain                    6.49 10.6           0.932 Spain           
-# ℹ 1 more variable: healthy_life_expectancy &lt;dbl&gt;</code></pre>
-</div>
-</div>
-<hr>
-<p><strong>Problem Four</strong></p>
-<p>Which join function is a better alternative to the previous solution?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>happy <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inner_join</span>(happy_join_one)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 5
-  country_name ladder_score   gdp social_support healthy_life_expectancy
-  &lt;chr&gt;               &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;                   &lt;dbl&gt;
-1 Iraq                 4.85  9.24          0.746                    60.6
-2 Comoros              4.29  8.03          0.626                    57.3
-3 Panama               6.18 10.4           0.896                    69.7
-4 Maldives             5.20  9.83          0.913                    70.6
-5 Spain                6.49 10.6           0.932                    74.7</code></pre>
-</div>
-</div>
-<hr>
-<p><strong>Problem Five</strong></p>
-<p>Filter out all countries from happy_full that are also in happy</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>happy_full <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">anti_join</span>(happy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 144 × 20
-   country_name region          ladder_score standard_error_of_la…¹ upperwhisker
-   &lt;chr&gt;        &lt;chr&gt;                  &lt;dbl&gt;                  &lt;dbl&gt;        &lt;dbl&gt;
- 1 Finland      Western Europe          7.84                  0.032         7.90
- 2 Denmark      Western Europe          7.62                  0.035         7.69
- 3 Switzerland  Western Europe          7.57                  0.036         7.64
- 4 Iceland      Western Europe          7.55                  0.059         7.67
- 5 Netherlands  Western Europe          7.46                  0.027         7.52
- 6 Norway       Western Europe          7.39                  0.035         7.46
- 7 Sweden       Western Europe          7.36                  0.036         7.43
- 8 Luxembourg   Western Europe          7.32                  0.037         7.40
- 9 New Zealand  North America …         7.28                  0.04          7.36
-10 Austria      Western Europe          7.27                  0.036         7.34
-# ℹ 134 more rows
-# ℹ abbreviated name: ¹​standard_error_of_ladder_score
-# ℹ 15 more variables: lowerwhisker &lt;dbl&gt;, logged_gdp_per_capita &lt;dbl&gt;,
-#   social_support &lt;dbl&gt;, healthy_life_expectancy &lt;dbl&gt;,
-#   freedom_to_make_life_choices &lt;dbl&gt;, generosity &lt;dbl&gt;,
-#   perceptions_of_corruption &lt;dbl&gt;, ladder_score_in_dystopia &lt;dbl&gt;,
-#   explained_by_log_gdp_per_capita &lt;dbl&gt;, explained_by_social_support &lt;dbl&gt;, …</code></pre>
+<pre><code># A tibble: 1,269 × 15
+# Groups:   Year [12]
+   Year  aapi_male aapi_female indigenous_male indigenous_female hispanic_male
+   &lt;chr&gt;     &lt;int&gt;       &lt;int&gt;           &lt;int&gt;             &lt;int&gt;         &lt;int&gt;
+ 1 2014        176         153              46                51          2657
+ 2 2014         51          51               4                 7           213
+ 3 2014          1           2               2                 2           154
+ 4 2014         29          25               8                 5            57
+ 5 2014         10           7               0                 3           165
+ 6 2014         33          44               6                 9           980
+ 7 2014         23          38               5                 3           135
+ 8 2014          5           9               0                 2           108
+ 9 2014          9          12               7                 3           495
+10 2014          5           3               7                 5            26
+# ℹ 1,259 more rows
+# ℹ 9 more variables: hispanic_female &lt;int&gt;, black_male &lt;int&gt;,
+#   black_female &lt;int&gt;, white_male &lt;int&gt;, white_female &lt;int&gt;, other_male &lt;int&gt;,
+#   other_female &lt;int&gt;, total_male &lt;int&gt;, total_female &lt;int&gt;</code></pre>
 </div>
 </div>
 
 
+</section>
+</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">https://creativecommons.org/licenses/by/4.0/</a></div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
