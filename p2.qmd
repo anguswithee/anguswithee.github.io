@@ -15,8 +15,6 @@ author:
         city: Boone
         state: NC  
         url: https://www.appstate.edu/
-abstract: >
-  Fill in later
 keywords:
   - R
   - data viz
@@ -141,7 +139,7 @@ ggplot(demo2024, aes(x = race, y = count, fill = race)) +
   theme(
     plot.title = element_text(hjust = 0.5),
     axis.text.x = element_text(angle = 45, hjust = 1)
-  ) +
+  ) + guides(fill="none") +
   theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
 ```
 
@@ -168,7 +166,7 @@ ggplot(demo2024, aes(x = race, y = count, fill = sex)) +
   labs(
     x = "Race",
     y = "Number of Students"
-  ) +
+  ) + 
   theme_minimal() +
   theme(
     plot.title = element_text(hjust = 0.5),
@@ -185,7 +183,7 @@ demographic_trends <- demographics |>
   summarize(total_count = sum(count, na.rm = TRUE), .groups = "drop")
 ```
 
-```{r fig4, fig.cap="Figure 4: NC Public School Racial Demographic Trends (2014-2024)."}
+```{r fig4, fig.cap="Figure 4: NC Public School Racial Demographic Trends (2024)."}
 ggplot(demographic_trends, aes(x = Year, y = total_count, color = race)) +
   geom_smooth(method = "loess", se = FALSE, size = 1)+
   labs(
@@ -270,7 +268,8 @@ ggplot(wata_demo2024, aes(x = race, y = count, fill = race)) +
     x = "Race",
     y = "Number of Students"
   ) +
-  theme_minimal() +
+  theme_minimal() + 
+  guides(fill="none") +
   theme(
     plot.title = element_text(hjust = 0.5),
     axis.text.x = element_text(angle = 45, hjust = 1)
@@ -278,7 +277,7 @@ ggplot(wata_demo2024, aes(x = race, y = count, fill = race)) +
   theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
 ```
 
-```{r}
+```{r fig8, fig.cap="Figure 8: Watauga County Public School Race and Sex Demographics Over Time (2014-2024)"}
 ggplot(wata_demo_trends, aes(x = Year, y = total_count, color = race, linetype = sex)) +
   geom_line(size = 1) +
   labs(
@@ -291,7 +290,7 @@ ggplot(wata_demo_trends, aes(x = Year, y = total_count, color = race, linetype =
     theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
 ```
 
-```{r fig8, fig.cap="Figure 8: Watauga County Public School Percentage of Students of Color Over Time (2014-2024)."}
+```{r fig9, fig.cap="Figure 9: Watauga County Public School Percentage of Students of Color Over Time (2014-2024)."}
 ggplot(wata_poc_data, aes(x = Year, y = poc_percentage)) +
   geom_line(size = 1) +
   labs(
