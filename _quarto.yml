@@ -1,6 +1,6 @@
 project:
   type: website
-  output-dir: docs
+  output-dir: anguswithee.github.io
 
 website:
   title: "Angus Withee"
@@ -10,7 +10,7 @@ website:
         text: Home
       - about.qmd
       - project.qmd
-      - project2.qmd
+      - p2.qmd
     
     tools:
       - icon: film
