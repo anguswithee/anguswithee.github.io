@@ -1,5 +1,5 @@
 ---
-title: "North Carolina Public School Demographics (2013-2023)"
+title: "North Carolina Public School Demographics (2014-2024)"
 date: last-modified
 date-format: "[Last modified on] MMMM DD, YYYY HH:mm:ss zzz"
 format: 
