@@ -81,10 +81,9 @@ There are 17 variables in the `demographics` data frame.
 ## Data Wrangling
 
 To make the data ideal for visualization, merge and rename variables.
-
 ```{r}
-demographics_by_sex <- demographics |> 
-  group_by(Year) |>
+demographics <- demographics |> 
+  group_by(Year,LEA.Name) |>
   summarize(aapi_male = ASIAN.Male+PACIFIC.ISLAND..Male,
             aapi_female = ASIAN.Female+PACIFIC.ISLAND..Female,
             indigenous_male = INDIAN.Male,
@@ -95,13 +94,211 @@ demographics_by_sex <- demographics |>
             black_female = BLACK.Female,
             white_male = WHITE.Male,
             white_female = WHITE.Female,
-            other_male = TWO.OR.MORE.Male,
-            other_female = TWO.OR.MOREFemale) |>
-  mutate(total_male = aapi_male+indigenous_male+hispanic_male+black_male+white_male+other_male,
-         total_female = aapi_female+indigenous_female+hispanic_female+black_female+white_female+other_female)
-demographics_by_sex <- demographics_by_sex |> filter (Year>1)
-demographics_by_sex
+            multiracial_male = TWO.OR.MORE.Male,
+            multiracial_female = TWO.OR.MOREFemale)
+demographics <- demographics |> filter (Year>1)
+```
+Then, reshape the dataset from a wide format to a long format. 
+```{r}
+demographics <- demographics |> 
+  select(Year, LEA.Name, 
+         aapi_male, aapi_female, 
+         indigenous_male, indigenous_female, 
+         hispanic_male, hispanic_female, 
+         black_male, black_female, 
+         white_male, white_female, 
+         multiracial_male, multiracial_female) |> 
+  pivot_longer(
+    cols = starts_with("aapi") | starts_with("indigenous") | 
+           starts_with("hispanic") | starts_with("black") | 
+           starts_with("white") | starts_with("multiracial"),
+    names_to = c("race", "sex"),
+    names_pattern = "(.*)_(male|female)",
+    values_to = "count"
+  )
+demographics$Year <- as.numeric(demographics$Year)
+head(demographics)
+```
+# Data Visualization
+
+## NC Public School Demographics (2024)
+
+Before we look at changes over time, let's start by looking at demographics in 2024.
+
+```{r}
+demo2024 <- demographics |>
+  filter(Year==2024)
 ```
 
+```{r fig1, fig.cap="Figure 1: NC Public School Students by Race (2024)."}
+ggplot(demo2024, aes(x = race, y = count, fill = race)) +
+  geom_bar(stat = "identity") +
+  labs(
+    x = "Race",
+    y = "Number of Students"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
 
+NC Public School Demographics by Sex (2024)
 
+```{r fig2, fig.cap="Figure 2: NC Public School Demographics by Sex (2024)."}
+ggplot(demo2024, aes(x = sex, y = count, fill = sex)) +
+  geom_bar(stat = "identity") +
+  labs(
+    x = "Sex",
+    y = "Number of Students"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
+
+```{r fig3, fig.cap="Figure 3: NC Public School Demographics by Race and Sex (2024)."}
+ggplot(demo2024, aes(x = race, y = count, fill = sex)) +
+  geom_bar(stat = "identity") +
+  labs(
+    x = "Race",
+    y = "Number of Students"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
+
+## NC Public School Demographics Over Time
+
+```{r}
+demographic_trends <- demographics |> 
+  group_by(Year, race, sex) |> 
+  summarize(total_count = sum(count, na.rm = TRUE), .groups = "drop")
+```
+
+```{r fig4, fig.cap="Figure 4: NC Public School Racial Demographic Trends (2014-2024)."}
+ggplot(demographic_trends, aes(x = Year, y = total_count, color = race)) +
+  geom_smooth(method = "loess", se = FALSE, size = 1)+
+  labs(
+    x = "Year",
+    y = "Total Count"
+  ) +
+  scale_x_continuous(breaks = unique(demographic_trends$Year)) + # Show all years
+  scale_y_continuous(labels = scales::comma) +
+    theme_minimal() +
+    theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
+
+```{r fig5, fig.cap="Figure 5: NC Public School Race and Sex Demographic Trends (2014-2024)."}
+ggplot(demographic_trends, aes(x = Year, y = total_count, color = race, linetype = sex)) +
+  geom_line(size = 1) +
+  labs(
+    x = "Year",
+    y = "Total Count"
+  ) +
+  scale_x_continuous(breaks = unique(demographic_trends$Year)) + # Show all years
+  scale_y_continuous(labels = scales::comma) +
+    theme_minimal() +
+    theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
+
+```{r}
+white_total <- demographic_trends |> 
+  filter(race == "white") |> 
+  group_by(Year) |> 
+  summarize(white_count = sum(total_count), .groups = "drop")
+
+total_count_by_year <- demographic_trends |> 
+  group_by(Year) |> 
+  summarize(total_students = sum(total_count, na.rm = TRUE), .groups = "drop")
+
+poc_data <- left_join(total_count_by_year, white_total, by = "Year") |> 
+  mutate(poc_percentage = 100 * (total_students - white_count) / total_students)
+```
+
+```{r fig6, fig.cap="Figure 6: NC Public School Percentage of Students of Color Over Time (2014-2024)."}
+ggplot(poc_data, aes(x = Year, y = poc_percentage)) +
+  geom_line(size = 1) +
+  labs(
+    x = "Year",
+    y = "Percentage of Students of Color"
+  ) +
+  theme_minimal() +
+  scale_y_continuous(limits = c(0, 100),labels = scales::percent_format(scale = 1)) +
+    scale_x_continuous(breaks = unique(demographic_trends$Year))
+```
+
+## Watauga County Public School Demographics
+
+```{r}
+wata_demo <- demographics |>
+  filter(LEA.Name=="Watauga County Schools")
+
+wata_demo2024 <- wata_demo |>
+  filter(Year==2024)
+
+wata_demo_trends <- wata_demo |>
+  group_by(Year, race, sex) |> 
+  summarize(total_count = sum(count, na.rm = TRUE), .groups = "drop")
+
+wata_white_total <- wata_demo_trends |>
+  filter(race == "white") |> 
+  group_by(Year) |> 
+  summarize(white_count = sum(total_count), .groups = "drop")
+
+wata_total_count_by_year <- wata_demo_trends |>
+  group_by(Year) |> 
+  summarize(total_students = sum(total_count, na.rm = TRUE), .groups = "drop")
+
+wata_poc_data <- left_join(wata_total_count_by_year, wata_white_total, by = "Year") |> 
+  mutate(poc_percentage = 100 * (total_students - white_count) / total_students)
+```
+
+```{r fig7, fig.cap="Figure 7: Watauga County Public School Demographics by Race and Sex (2024)."}
+ggplot(wata_demo2024, aes(x = race, y = count, fill = race)) +
+  geom_bar(stat = "identity") +
+  labs(
+    x = "Race",
+    y = "Number of Students"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
+
+```{r}
+ggplot(wata_demo_trends, aes(x = Year, y = total_count, color = race, linetype = sex)) +
+  geom_line(size = 1) +
+  labs(
+    x = "Year",
+    y = "Total Count"
+  ) +
+  scale_x_continuous(breaks = unique(demographic_trends$Year)) + # Show all years
+  scale_y_continuous(labels = scales::comma) +
+    theme_minimal() +
+    theme(panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
+
+```{r fig8, fig.cap="Figure 8: Watauga County Public School Percentage of Students of Color Over Time (2014-2024)."}
+ggplot(wata_poc_data, aes(x = Year, y = poc_percentage)) +
+  geom_line(size = 1) +
+  labs(
+    x = "Year",
+    y = "Percentage of Students of Color"
+  ) +
+  theme_minimal() +
+  scale_y_continuous(limits = c(0, 100),labels = scales::percent_format(scale = 1)) +
+    scale_x_continuous(breaks = unique(demographic_trends$Year))
+```
